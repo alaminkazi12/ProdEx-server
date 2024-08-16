@@ -42,6 +42,7 @@ async function run() {
     // });
 
     app.get("/products", async (req, res) => {
+      // Parse query parameters
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 8;
       const skip = (page - 1) * limit;
@@ -54,6 +55,7 @@ async function run() {
       const sortField = req.query.sortField || "product_creation_date";
       const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
 
+      // Construct query object
       const query = {
         ...(searchQuery && {
           product_name: { $regex: searchQuery, $options: "i" },
@@ -66,14 +68,27 @@ async function run() {
       };
 
       try {
-        const result = await productCollection
+        // Fetch the total count of matching documents
+        const totalCount = await productCollection.countDocuments(query);
+        const totalPages = Math.ceil(totalCount / limit);
+
+        // Execute the query with sorting, skipping, and limiting
+        const products = await productCollection
           .find(query)
           .sort({ [sortField]: sortOrder })
           .skip(skip)
           .limit(limit)
           .toArray();
-        res.send(result);
+
+        // Send the resulting products along with pagination data
+        res.send({
+          products,
+          currentPage: page,
+          totalPages,
+          totalCount,
+        });
       } catch (error) {
+        // Send an error response if the query fails
         res.status(500).send({ error: "Failed to fetch products" });
       }
     });
