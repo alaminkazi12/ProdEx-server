@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://prodexshow.netlify.app"],
     credentials: true,
   })
 );
@@ -43,11 +43,7 @@ async function run() {
 
     app.get("/products", async (req, res) => {
       // Parse query parameters
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 8;
-      const skip = (page - 1) * limit;
-      const searchQuery = req.query.search || "";
-      const brand = req.query.brand || "";
+
       const category = req.query.category || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice =
