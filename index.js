@@ -34,12 +34,12 @@ async function run() {
     const prodex = client.db("prodEx");
     const productCollection = prodex.collection("Products");
 
-    products related api
+    // products related api
 
-    app.get("/products", async (req, res) => {
-      const result = await productCollection.find().toArray();
-      res.send(result);
-    });
+    // app.get("/products", async (req, res) => {
+    //   const result = await productCollection.find().toArray();
+    //   res.send(result);
+    // });
 
     app.get("/products", async (req, res) => {
       // Parse query parameters
