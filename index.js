@@ -51,7 +51,7 @@ async function run() {
       const category = req.query.category || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice =
-       
+        parseFloat(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
       const sortField = req.query.sortField || "product_creation_date";
       const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
 
